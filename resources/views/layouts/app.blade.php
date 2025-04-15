@@ -7,12 +7,10 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    @yield('styles')
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=nunito:400,500,600&display=swap" rel="stylesheet" />
-
-
 </head>
 <body class="font-sans antialiased">
     <div id="app">
@@ -22,8 +20,21 @@
                     <div class="flex">
                         <div class="flex-shrink-0 flex items-center">
                             <a href="{{ url('/') }}" class="text-xl font-bold text-gray-800">
-                                {{ config('app.name', 'Laravel') }}
+                            <title>Association Al Amal</title>
+
                             </a>
+                        </div>
+                        
+                        <!-- Ajout des liens de navigation -->
+                        <div class="hidden md:ml-6 md:flex md:space-x-4">
+                            @auth
+                                <a href="{{ route('beneficiaire.index') }}" class="inline-flex items-center px-3 py-2 text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-500 transition duration-150 {{ request()->routeIs('beneficiaire.*') ? 'text-blue-600 border-b-2 border-blue-500' : '' }}">
+                                    Bénéficiaires
+                                </a>
+                                <a href="{{ route('candidature.index') }}" class="inline-flex items-center px-3 py-2 text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-500 transition duration-150 {{ request()->routeIs('candidature.*') ? 'text-blue-600 border-b-2 border-blue-500' : '' }}">
+                                    Candidatures
+                                </a>
+                            @endauth
                         </div>
                     </div>
                     
@@ -32,9 +43,16 @@
                             @if (Route::has('login'))
                                 <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2">{{ __('Login') }}</a>
                             @endif
-
-                        
                         @else
+                            <!-- Menu mobile pour les liens de navigation -->
+                            <div class="md:hidden mr-4">
+                                <button id="mobile-menu-button" class="text-gray-600 hover:text-gray-900">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
                             <div class="relative">
                                 <button id="user-menu" class="flex items-center text-gray-700 hover:text-gray-900">
                                     <span>{{ Auth::user()->name }}</span>
@@ -43,7 +61,11 @@
                                     </svg>
                                 </button>
                                 
-                                <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
+                                <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+   {{ Auth::user()->name }}
+</a>
+
                                     <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
@@ -57,6 +79,20 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Menu mobile -->
+            <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200">
+                <div class="px-2 pt-2 pb-3 space-y-1">
+                    @auth
+                        <a href="{{ route('beneficiaire.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 {{ request()->routeIs('beneficiaire.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                            Bénéficiaires
+                        </a>
+                        <a href="{{ route('candidature.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 {{ request()->routeIs('candidature.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                            Candidatures
+                        </a>
+                    @endauth
+                </div>
+            </div>
         </nav>
 
         <main class="py-4">
@@ -65,7 +101,7 @@
     </div>
 
     <script>
-        // Simple dropdown toggle
+        // Simple dropdown toggle for user menu
         document.addEventListener('DOMContentLoaded', function() {
             const userMenu = document.getElementById('user-menu');
             const dropdownMenu = document.getElementById('dropdown-menu');
@@ -82,7 +118,19 @@
                     }
                 });
             }
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
         });
     </script>
+    @yield('scripts')
+    
 </body>
 </html>

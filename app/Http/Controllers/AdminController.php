@@ -14,17 +14,20 @@ class AdminController extends Controller
     }
 
     public function index()
-    {
-        $candidaturesEnAttente = Candidature::where('status', 'en_attente')->count();
-        $candidaturesAcceptees = Candidature::where('status', 'accepte')->count();
-        $candidaturesRefusees = Candidature::where('status', 'refuse')->count();
-        $totalBeneficiaires = Beneficiaire::count();
+{
+    $totalCandidatures = Candidature::count();
+    $totalBeneficiaires = Beneficiaire::count();
 
-        return view('admin.index', compact(
-            'candidaturesEnAttente',
-            'candidaturesAcceptees',
-            'candidaturesRefusees',
-            'totalBeneficiaires'
-        ));
-    }
+    $candidaturesEnAttente = Candidature::where('status', 'en_attente')->count();
+    $candidaturesAcceptees = Candidature::where('status', 'acceptee')->count();
+    $candidaturesRefusees = Candidature::where('status', 'refusee')->count();
+
+    return view('admin.index', compact(
+        'totalCandidatures',
+        'totalBeneficiaires',
+        'candidaturesEnAttente',
+        'candidaturesAcceptees',
+        'candidaturesRefusees'
+    ));
+}
 }

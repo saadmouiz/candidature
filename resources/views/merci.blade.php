@@ -1,21 +1,40 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merci- Candidature</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-100 via-white to-blue-100 font-sans">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Merci !</div>
-
-                <div class="card-body">
-                    <p>Votre candidature a été soumise avec succès.</p>
-                    <p>Un email de confirmation vous a été envoyé. Notre équipe va examiner votre dossier dans les meilleurs délais.</p>
-                    <div class="text-center mt-4">
-                        <a href="{{ route('welcome') }}" class="btn btn-primary">Retour à l'accueil</a>
-                    </div>
-                </div>
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-blue-600">Association Al Amal</a>
+            <div>
+                <a href="{{ route('login') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition">
+                    Login
+                </a>
             </div>
         </div>
+    </nav>
+
+    <!-- CONTENU -->
+    <div class="flex items-center justify-center min-h-screen -mt-16">
+        <div class="bg-white rounded-xl shadow-xl p-10 w-full max-w-2xl">
+            <h1 class="text-3xl font-semibold text-center text-blue-600 mb-6">Merci de votre candidature</h1>
+            
+            <div class="flex justify-center space-x-6">
+                <h3 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition transform hover:scale-105">
+                Merci de votre candidature
+</h3>
+                
+            </div>
+
+            <p class="text-center text-gray-500 mt-6">Merci de votre confiance ❤️</p>
+        </div>
     </div>
-</div>
-@endsection
+
+</body>
+</html>

@@ -200,44 +200,32 @@
     </div>
 </div>
 
-<!-- Add Font Awesome for icons -->
 <script src="https://kit.fontawesome.com/your-code-here.js" crossorigin="anonymous"></script>
 
-<!-- Add custom CSS at the end of the page -->
 <style>
-    /* Fix the LL0000 color code to e60000 */
     body {
         background-color: #f8f9fa;
     }
-    
+
     .form-control:focus, .form-select:focus {
         border-color: #e60000;
         box-shadow: 0 0 0 0.25rem rgba(230, 0, 0, 0.25);
     }
-    
-    .form-floating>.form-control:focus~label {
-        color: #e60000;
-    }
-    
-    .z-index-1 {
-        z-index: 1;
-    }
-    
+
     .section-title {
         margin-bottom: 1.5rem;
     }
-    
-    /* Hover effect for submit button */
+
     button[type="submit"]:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(230, 0, 0, 0.4);
         transition: all 0.3s;
     }
-    
-    /* Card hover effects */
+
     .card:hover {
         transform: translateY(-5px);
         transition: transform 0.3s ease;
     }
 </style>
+
 @endsection
