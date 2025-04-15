@@ -7,6 +7,7 @@ use App\Http\Controllers\BeneficiaireController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 
+// Routes publiques
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -19,12 +20,22 @@ Route::get('/merci', function() {
 
 // Routes authentifiées
 Route::middleware(['auth'])->group(function () {
+    // Dashboard administrateur
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    
+    // Gestion des candidatures
     Route::get('/admin/candidatures', [CandidatureController::class, 'index'])->name('candidature.index');
     Route::get('/admin/candidatures/{candidature}', [CandidatureController::class, 'show'])->name('candidature.show');
-    Route::get('/admin/beneficiaires', [BeneficiaireController::class, 'index'])->name('beneficiaire.index');
-    Route::get('/admin/beneficiaires/{beneficiaire}', [BeneficiaireController::class, 'show'])->name('beneficiaire.show');    Route::post('/admin/candidatures/{candidature}/accepter', [CandidatureController::class, 'accepter'])->name('candidature.accepter');
+    Route::post('/admin/candidatures/{candidature}/accepter', [CandidatureController::class, 'accepter'])->name('candidature.accepter');
     Route::post('/admin/candidatures/{candidature}/refuser', [CandidatureController::class, 'refuser'])->name('candidature.refuser');
+    
+    // Gestion des bénéficiaires
+    Route::get('/admin/beneficiaires', [BeneficiaireController::class, 'index'])->name('beneficiaire.index');
+    Route::get('/admin/beneficiaires/{beneficiaire}', [BeneficiaireController::class, 'show'])->name('beneficiaire.show');
+    
+    // Éventuellement, ajoutez ces routes pour voir les candidatures acceptées et refusées
+    Route::get('/admin/candidatures/acceptees', [CandidatureController::class, 'acceptees'])->name('candidature.acceptees');
+    Route::get('/admin/candidatures/refusees', [CandidatureController::class, 'refusees'])->name('candidature.refusees');
 });
 
 // Routes d'authentification générées par Laravel UI

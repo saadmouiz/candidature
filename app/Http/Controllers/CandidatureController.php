@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidature;
 use App\Models\Beneficiaire;
+use App\Mail\ConfirmationCandidature;
+use App\Mail\CandidatureAcceptee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class CandidatureController extends Controller
@@ -20,22 +23,21 @@ class CandidatureController extends Controller
         return view('candidatures.create');
     }
 
-    // Correction de la méthode store
     public function store(Request $request)
     {
         $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'cin' => 'required|string|max:20|unique:candidatures',
-            'date' => 'required|date',  // Nom du champ dans le formulaire
+            'date' => 'required|date',
             'email' => 'required|email|max:255|unique:candidatures',
-            'tel' => 'required|numeric|digits:10|unique:candidatures',  // Nom du champ dans le formulaire
+            'tel' => 'required|numeric|digits:10|unique:candidatures',
             'niveau_scolaire' => 'required|in:bac,bac+2,bac+3',
-            'baccalaureat' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',  // Nom du champ dans le formulaire
-            'cin_doc' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',       // Nom du champ dans le formulaire
-            'acte_doc' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',      // Nom du champ dans le formulaire
-            'releve_notes' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',  // Nom du champ dans le formulaire
-            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',           // Nom du champ dans le formulaire
+            'baccalaureat' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'cin_doc' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'acte_doc' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'releve_notes' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
     
         // Stockage des fichiers
@@ -46,13 +48,13 @@ class CandidatureController extends Controller
         $photoPath = $request->file('photo')->store('photos', 'public');
     
         // Création de la candidature
-        Candidature::create([
+        $candidature = Candidature::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'cin' => $request->cin,
-            'date_naissance' => $request->date,   // stocké comme 'date_naissance'
+            'date_naissance' => $request->date,
             'email' => $request->email,
-            'tel' => $request->tel,               // stocké comme 'tel' (pas 'telephone')
+            'tel' => $request->tel,
             'niveau_scolaire' => $request->niveau_scolaire,
             'baccalaureat_path' => $baccalaureatPath,
             'cin_path' => $cinPath,
@@ -61,9 +63,13 @@ class CandidatureController extends Controller
             'photo_path' => $photoPath,
             'status' => 'en_attente',
         ]);
+        
+        // Envoi de l'email de confirmation
+        Mail::to($candidature->email)->send(new ConfirmationCandidature($candidature));
     
         return redirect()->route('merci');
     }
+
     public function accepter(Candidature $candidature)
     {
         $candidature->update(['status' => 'accepte']);
@@ -84,6 +90,9 @@ class CandidatureController extends Controller
             'releve_notes_path' => $candidature->releve_notes_path,
             'photo_path' => $candidature->photo_path
         ]);
+        
+        // Envoi de l'email d'acceptation
+        Mail::to($candidature->email)->send(new CandidatureAcceptee($candidature));
     
         return redirect()->back()->with('success', 'Candidature acceptée avec succès');
     }
@@ -94,8 +103,9 @@ class CandidatureController extends Controller
         
         return redirect()->back()->with('success', 'Candidature refusée avec succès');
     }
+    
     public function show(Candidature $candidature)
-{
-    return view('candidatures.show', compact('candidature'));
-}
+    {
+        return view('candidatures.show', compact('candidature'));
+    }
 }
