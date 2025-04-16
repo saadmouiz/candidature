@@ -3,6 +3,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+
 
 class Beneficiaire extends Model
 {
@@ -21,11 +23,17 @@ class Beneficiaire extends Model
         'cin_path',
         'acte_path',
         'releve_notes_path',
-        'photo_path'
+        'photo_path',
+        'admin_id',
     ];
 
     public function candidature()
     {
         return $this->belongsTo(Candidature::class);
     }
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+
 }

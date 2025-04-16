@@ -9,6 +9,8 @@ use App\Mail\CandidatureAcceptee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class CandidatureController extends Controller
 {
@@ -71,31 +73,34 @@ class CandidatureController extends Controller
     }
 
     public function accepter(Candidature $candidature)
-    {
-        $candidature->update(['status' => 'accepte']);
-        
-        // Créer un bénéficiaire avec toutes les données de la candidature
-        Beneficiaire::create([
-            'candidature_id' => $candidature->id,
-            'nom' => $candidature->nom,
-            'prenom' => $candidature->prenom,
-            'cin' => $candidature->cin,
-            'date_naissance' => $candidature->date_naissance,
-            'email' => $candidature->email,
-            'tel' => $candidature->tel,
-            'niveau_scolaire' => $candidature->niveau_scolaire,
-            'baccalaureat_path' => $candidature->baccalaureat_path,
-            'cin_path' => $candidature->cin_path,
-            'acte_path' => $candidature->acte_path,
-            'releve_notes_path' => $candidature->releve_notes_path,
-            'photo_path' => $candidature->photo_path
-        ]);
-        
-        // Envoi de l'email d'acceptation
-        Mail::to($candidature->email)->send(new CandidatureAcceptee($candidature));
+{
+    $candidature->update(['status' => 'accepte']);
+
     
-        return redirect()->back()->with('success', 'Candidature acceptée avec succès');
-    }
+    // Créer un bénéficiaire avec toutes les données de la candidature + admin connecté
+    Beneficiaire::create([
+        'candidature_id' => $candidature->id,
+        'nom' => $candidature->nom,
+        'prenom' => $candidature->prenom,
+        'cin' => $candidature->cin,
+        'date_naissance' => $candidature->date_naissance,
+        'email' => $candidature->email,
+        'tel' => $candidature->tel,
+        'niveau_scolaire' => $candidature->niveau_scolaire,
+        'baccalaureat_path' => $candidature->baccalaureat_path,
+        'cin_path' => $candidature->cin_path,
+        'acte_path' => $candidature->acte_path,
+        'releve_notes_path' => $candidature->releve_notes_path,
+        'photo_path' => $candidature->photo_path,
+        'admin_id' => auth()->id() // Stocke l'ID de l'admin
+    ]);
+    
+
+    // Envoi de l'email d'acceptation
+    Mail::to($candidature->email)->send(new CandidatureAcceptee($candidature));
+
+    return redirect()->back()->with('success', 'Candidature acceptée avec succès');
+}
 
     public function refuser(Candidature $candidature)
     {
@@ -108,4 +113,12 @@ class CandidatureController extends Controller
     {
         return view('candidatures.show', compact('candidature'));
     }
+
+    public function refusees()
+    {
+        $candidatures = Candidature::where('status', 'refuse')->paginate(10);
+        return view('candidatures.refusees', compact('candidatures'));
+    }
+    
+
 }

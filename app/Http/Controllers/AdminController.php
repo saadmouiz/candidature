@@ -30,4 +30,18 @@ class AdminController extends Controller
         'candidaturesRefusees'
     ));
 }
+
+public function getStats()
+{
+    $stats = [
+        'totalCandidatures' => Candidature::count(),
+        'totalBeneficiaires' => Beneficiaire::count(),
+        'candidaturesEnAttente' => Candidature::where('status', 'en_attente')->count(),
+        'candidaturesAcceptees' => Candidature::where('status', 'acceptee')->count(),
+        'candidaturesRefusees' => Candidature::where('status', 'refusee')->count(),
+    ];
+    
+    return response()->json($stats);
+}
+
 }

@@ -23,7 +23,9 @@
                                     <th>Téléphone</th>
                                     <th>Niveau scolaire</th>
                                     <th>Date d'acceptation</th>
+                                    <th>Valide par </th>
                                     <th>Actions</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,6 +39,7 @@
                                         <td>{{ $beneficiaire->tel }}</td>
                                         <td>{{ $beneficiaire->niveau_scolaire }}</td>
                                         <td>{{ $beneficiaire->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{ $beneficiaire->admin ? $beneficiaire->admin->name : 'Non spécifié' }}</td>
                                         <td>
                                             <a href="{{ route('beneficiaire.show', $beneficiaire) }}" class="btn btn-info btn-sm">Voir</a>
                                         </td>
@@ -78,6 +81,8 @@
     #searchInput {
         max-width: 250px;
         border-radius: 20px;
+        background-color:white;
+        color:black;
         border: 1px solid #ccc;
         padding: 6px 14px;
         font-size: 14px;

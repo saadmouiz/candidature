@@ -106,6 +106,13 @@
                                 <div class="col-sm-4 info-label">Date d'acceptation:</div>
                                 <div class="col-sm-8">{{ $beneficiaire->created_at->format('d/m/Y H:i') }}</div>
                             </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-4 info-label">valide Par :</div>
+                                <div class="col-sm-8">{{ $beneficiaire->admin ? $beneficiaire->admin->name : 'Non spécifié' }}</div>
+                            </div>
+
+                            
                             
                             <hr class="my-4">
                             
