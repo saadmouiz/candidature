@@ -17,7 +17,14 @@ class CandidatureController extends Controller
     public function index()
     {
         $candidatures = Candidature::where('status', 'en_attente')->paginate(10);
-        return view('candidatures.index', compact('candidatures'));
+        
+        // Get statistics for the dashboard
+        $acceptedCount = Candidature::where('status', 'accepte')->count();
+        $rejectedCount = Candidature::where('status', 'refuse')->count();
+        $pendingCount = Candidature::where('status', 'en_attente')->count();
+        $totalCount = Candidature::count();
+        
+        return view('candidatures.index', compact('candidatures', 'acceptedCount', 'rejectedCount', 'pendingCount', 'totalCount'));
     }
 
     public function create()

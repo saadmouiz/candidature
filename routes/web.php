@@ -52,3 +52,5 @@ Auth::routes();
 Route::get('/home', function() {
     return redirect('/admin');
 });
+
+Route::post('/newsletter', [App\Http\Controllers\NewsletterController::class, 'store'])->name('newsletter.store');
