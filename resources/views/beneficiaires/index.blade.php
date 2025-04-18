@@ -41,24 +41,11 @@
         max-width: 1280px;
     }
 
-    .page-title {
-        font-size: 2.25rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 0.5rem;
-    }
-
-    .page-subtitle {
-        color: var(--text-secondary);
-        font-size: 1.125rem;
-        margin-bottom: 2rem;
-    }
-
     /* Dashboard header */
     .dashboard-header {
         background-color: white;
-        border-radius: 1rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         padding: 1.5rem;
         margin-bottom: 2rem;
         display: flex;
@@ -114,137 +101,151 @@
         color: var(--text-secondary);
     }
 
-    /* Stats cards */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-card {
+    /* Modern Filters */
+    .filter-container {
         background-color: white;
-        border-radius: 1rem;
-        padding: 2rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        overflow: hidden;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
     }
-
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    
+    .filter-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
     }
-
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background: linear-gradient(to right, #EF4444, #FB7185);
+    
+    .filter-label i {
+        margin-right: 0.5rem;
+        color: var(--primary);
     }
-
-    .stat-icon {
+    
+    .filter-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    
+    .filter-btn {
+        padding: 0.5rem 1.25rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        background-color: var(--background);
+        border: none;
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .filter-btn i {
+        font-size: 0.75rem;
+    }
+    
+    .filter-btn:hover {
+        background-color: #f3f4f6;
+        color: var(--text-primary);
+    }
+    
+    .filter-btn.active {
+        background-color: var(--primary);
+        color: white;
+    }
+    
+    .filter-btn.active i {
+        opacity: 1;
+    }
+    
+    .filter-count {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 60px;
-        height: 60px;
-        background-color: rgba(239, 68, 68, 0.1);
-        color: var(--primary);
-        border-radius: 50%;
-        margin-bottom: 1.25rem;
-        font-size: 1.5rem;
+        background-color: rgba(255, 255, 255, 0.25);
+        color: white;
+        font-size: 0.75rem;
+        min-width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 9999px;
+        padding: 0 0.375rem;
     }
-
-    .stat-value {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 0.5rem;
-        line-height: 1;
-    }
-
-    .stat-label {
+    
+    .filter-btn:not(.active) .filter-count {
+        background-color: #e5e7eb;
         color: var(--text-secondary);
-        font-size: 0.875rem;
-    }
-
-    /* Tabs */
-    .tab-container {
-        margin-bottom: 2rem;
-    }
-
-    .tab-headers {
-        display: flex;
-        gap: 1rem;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 2rem;
-    }
-
-    .tab-btn {
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        color: var(--text-secondary);
-        background-color: transparent;
-        border: none;
-        border-bottom: 2px solid transparent;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .tab-btn.active {
-        color: var(--primary);
-        border-bottom-color: var(--primary);
     }
 
     /* Table styling */
     .table-container {
         background-color: white;
-        border-radius: 1rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         overflow: hidden;
         margin-bottom: 2rem;
     }
 
     .table-header {
-        padding: 1.5rem;
-        background: linear-gradient(to right, #EF4444, #FB7185);
-        color: white;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
         font-weight: 600;
-        font-size: 1.25rem;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .table-header-left {
+        display: flex;
+        align-items: center;
+    }
+    
+    .table-header i {
+        margin-right: 0.5rem;
+        color: var(--primary);
+    }
+    
+    .results-count {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: normal;
     }
 
     .table-content {
-        padding: 1.5rem;
+        padding: 0;
     }
 
     .data-table {
         width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
+        border-collapse: collapse;
     }
 
     .data-table th {
-        background-color: #f9fafb;
-        padding: 1rem;
+        padding: 1rem 1.5rem;
         text-align: left;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--text-secondary);
+        border-bottom: 1px solid var(--border-color);
     }
 
     .data-table td {
-        padding: 1rem;
+        padding: 1rem 1.5rem;
         color: var(--text-primary);
-        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
         vertical-align: middle;
+    }
+
+    .data-table tr:last-child td {
+        border-bottom: none;
     }
 
     .data-table tr:hover td {
@@ -271,10 +272,10 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0.375rem 0.75rem;
+        padding: 0.25rem 0.625rem;
         border-radius: 9999px;
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 500;
     }
 
     .status-bac {
@@ -300,26 +301,26 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         border-radius: 0.375rem;
         background-color: rgba(239, 68, 68, 0.1);
         color: var(--primary);
-        border: 1px solid transparent;
+        border: none;
         transition: all 0.2s;
     }
 
     .action-btn:hover {
         background-color: var(--primary);
         color: white;
-        border-color: var(--primary);
     }
 
     /* Pagination */
     .pagination-container {
         display: flex;
         justify-content: center;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
+        padding: 1rem 0;
     }
 
     .pagination {
@@ -337,9 +338,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 0.5rem;
+        width: 36px;
+        height: 36px;
+        border-radius: 0.375rem;
         font-weight: 500;
         color: var(--text-primary);
         border: 1px solid var(--border-color);
@@ -373,20 +374,20 @@
     }
 
     .empty-icon {
-        width: 80px;
-        height: 80px;
+        width: 64px;
+        height: 64px;
         background-color: rgba(239, 68, 68, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 2rem;
+        font-size: 1.5rem;
         color: var(--primary);
         margin-bottom: 1.5rem;
     }
 
     .empty-title {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
         font-weight: 600;
         color: var(--text-primary);
         margin-bottom: 0.5rem;
@@ -411,6 +412,12 @@
         
         .search-input {
             width: 100%;
+        }
+        
+        .filter-options {
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
         }
         
         .data-table td:nth-child(3),
@@ -443,53 +450,57 @@
             </div>
         </div>
 
-        <!-- Stats overview -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="stat-value">{{ $beneficiaires->total() }}</div>
-                <div class="stat-label">Total des bénéficiaires</div>
+        <!-- Modern Filters -->
+        @php
+            $allCount = $beneficiaires->count();
+            $bacCount = $beneficiaires->filter(function($b) {
+                return !str_contains(strtolower($b->niveau_scolaire), 'bac+');
+            })->count();
+            $bac2Count = $beneficiaires->filter(function($b) {
+                return str_contains(strtolower($b->niveau_scolaire), 'bac+2');
+            })->count();
+            $bac3Count = $beneficiaires->filter(function($b) {
+                return str_contains(strtolower($b->niveau_scolaire), 'bac+3');
+            })->count();
+        @endphp
+        
+        <div class="filter-container">
+            <div class="filter-label">
+                <i class="fa-solid fa-filter"></i> Filtrer par niveau d'études
             </div>
-            
-            @php
-                $bacCount = $beneficiaires->where('niveau_scolaire', 'like', '%bac%')->count();
-                $bac2Count = $beneficiaires->where('niveau_scolaire', 'like', '%bac+2%')->count();
-                $bac3Count = $beneficiaires->where('niveau_scolaire', 'like', '%bac+3%')->count();
-            @endphp
-            
-            <div class="stat-card">
-                <div class="stat-icon">
+            <div class="filter-options">
+                <button class="filter-btn active" id="allTab">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Tous
+                    <span class="filter-count">{{ $allCount }}</span>
+                </button>
+                <button class="filter-btn" id="bacTab">
                     <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div class="stat-value">{{ $bac2Count + $bac3Count }}</div>
-                <div class="stat-label">Niveau supérieur</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fa-solid fa-calendar-check"></i>
-                </div>
-                <div class="stat-value">{{ $beneficiaires->where('created_at', '>=', now()->subDays(30))->count() }}</div>
-                <div class="stat-label">Nouveaux ce mois</div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="tab-container">
-            <div class="tab-headers">
-                <button class="tab-btn active" id="allTab">Tous les bénéficiaires</button>
-                <button class="tab-btn" id="bacTab">Baccalauréat</button>
-                <button class="tab-btn" id="bac2Tab">Bac+2</button>
-                <button class="tab-btn" id="bac3Tab">Bac+3</button>
+                    Baccalauréat
+                    <span class="filter-count">{{ $bacCount }}</span>
+                </button>
+                <button class="filter-btn" id="bac2Tab">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    Bac+2
+                    <span class="filter-count">{{ $bac2Count }}</span>
+                </button>
+                <button class="filter-btn" id="bac3Tab">
+                    <i class="fa-solid fa-award"></i>
+                    Bac+3
+                    <span class="filter-count">{{ $bac3Count }}</span>
+                </button>
             </div>
         </div>
 
         <!-- Beneficiaries Table -->
         <div class="table-container">
             <div class="table-header">
-                <i class="fa-solid fa-list mr-2"></i> Liste des bénéficiaires
+                <div class="table-header-left">
+                    <i class="fa-solid fa-list"></i> Liste des bénéficiaires
+                </div>
+                <div class="results-count">
+                    <span id="visibleCount">{{ $beneficiaires->count() }}</span> résultats
+                </div>
             </div>
             
             <div class="table-content">
@@ -570,14 +581,21 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Search functionality
         const searchInput = document.getElementById('searchInput');
+        const visibleCount = document.getElementById('visibleCount');
+        
         searchInput.addEventListener('keyup', function() {
             const searchText = this.value.toLowerCase();
             const rows = document.querySelectorAll('.beneficiary-row');
+            let count = 0;
             
             rows.forEach(function(row) {
                 const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchText) ? '' : 'none';
+                const isVisible = text.includes(searchText);
+                row.style.display = isVisible ? '' : 'none';
+                if (isVisible) count++;
             });
+            
+            visibleCount.textContent = count;
         });
         
         // Tab filtering
@@ -594,9 +612,18 @@
             activeTab.classList.add('active');
         }
         
+        function updateVisibleCount() {
+            let count = 0;
+            rows.forEach(row => {
+                if (row.style.display !== 'none') count++;
+            });
+            visibleCount.textContent = count;
+        }
+        
         allTab.addEventListener('click', function() {
             setActiveTab(this);
             rows.forEach(row => row.style.display = '');
+            updateVisibleCount();
         });
         
         bacTab.addEventListener('click', function() {
@@ -608,6 +635,7 @@
                     row.style.display = 'none';
                 }
             });
+            updateVisibleCount();
         });
         
         bac2Tab.addEventListener('click', function() {
@@ -619,6 +647,7 @@
                     row.style.display = 'none';
                 }
             });
+            updateVisibleCount();
         });
         
         bac3Tab.addEventListener('click', function() {
@@ -630,17 +659,7 @@
                     row.style.display = 'none';
                 }
             });
-        });
-        
-        // Animation for rows
-        rows.forEach((row, index) => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(10px)';
-            setTimeout(() => {
-                row.style.transition = 'all 0.3s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
-            }, 50 * index);
+            updateVisibleCount();
         });
     });
 </script>

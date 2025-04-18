@@ -20,7 +20,7 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500 mb-1">Total Candidatures</p>
+                        <p class="text-sm text-gray-500 mb-1">Total Beneficiaires</p>
                         <p class="text-2xl font-semibold text-gray-800">{{ $totalCount }}</p>
                     </div>
                 </div>

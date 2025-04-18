@@ -51,6 +51,9 @@
                             <a href="{{ route('candidature.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('candidature.index') ? 'text-red-500 bg-gray-50' : '' }}">
                                 Candidatures Dashboard
                             </a>
+                            <a href="{{ route('candidature.refusees') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('candidature.refusees') ? 'text-red-500 bg-gray-50' : '' }}">
+                                Refuser
+                            </a>
                         </div>
                     </div>
                     
@@ -127,6 +130,9 @@
                         </a>
                         <a href="{{ route('candidature.index') }}" class="block px-4 py-2 text-base font-medium text-gray-700 hover:text-red-500 hover:bg-gray-50 {{ request()->routeIs('candidature.index') ? 'text-red-500 bg-gray-50' : '' }}">
                             Candidatures Dashboard
+                        </a>
+                        <a href="{{ route('candidature.refusees') }}" class="block px-4 py-2 text-base font-medium text-gray-700 hover:text-red-500 hover:bg-gray-50 {{ request()->routeIs('candidature.refusees') ? 'text-red-500 bg-gray-50' : '' }}">
+                            Refuser
                         </a>
                     </div>
                 </div>

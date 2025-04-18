@@ -1,37 +1,30 @@
 @extends('layouts.app')
 
 @section('styles')
-<!-- Add Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
     :root {
         --primary: #ef4444;
         --primary-hover: #dc2626;
         --primary-light: #fee2e2;
-        --secondary: #475569;
-        --secondary-light: #f1f5f9;
-        --success: #10b981;
-        --success-light: #d1fae5;
-        --warning: #f59e0b;
-        --warning-light: #fef3c7;
-        --background: #f8fafc;
+        --background: #f9fafb;
         --card-bg: #ffffff;
-        --text-dark: #1e293b;
-        --text-gray: #64748b;
-        --text-light: #94a3b8;
-        --border: #e2e8f0;
-        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --text-light: #9ca3af;
+        --border-color: #e5e7eb;
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     body {
         background-color: var(--background);
-        color: var(--text-dark);
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        color: var(--text-primary);
+        font-family: system-ui, -apple-system, sans-serif;
     }
 
     .beneficiary-container {
-        max-width: 1200px;
+        max-width: 1024px;
         margin: 0 auto;
         padding: 1.5rem;
     }
@@ -39,57 +32,61 @@
     .page-header {
         display: flex;
         align-items: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
     .back-link {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        color: var(--secondary);
+        color: var(--text-secondary);
         text-decoration: none;
         font-weight: 500;
+        font-size: 0.875rem;
         transition: all 0.2s;
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.375rem;
     }
 
     .back-link:hover {
-        background-color: var(--secondary-light);
-        color: var(--text-dark);
+        background-color: #f3f4f6;
+        color: var(--text-primary);
         text-decoration: none;
     }
 
     .main-card {
         background-color: var(--card-bg);
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         box-shadow: var(--shadow);
         overflow: hidden;
+        margin-bottom: 1.5rem;
     }
 
     .beneficiary-header {
-        padding: 2rem;
-        border-bottom: 1px solid var(--border);
-        text-align: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .beneficiary-name {
-        font-size: 1.75rem;
-        font-weight: 700;
+        font-size: 1.5rem;
+        font-weight: 600;
         margin-bottom: 0.5rem;
-        color: var(--text-dark);
+        color: var(--text-primary);
     }
 
     .beneficiary-name span {
-        background: linear-gradient(to right, var(--primary), #fb7185);
-        -webkit-background-clip: text;
         background-clip: text;
+        -webkit-background-clip: text;
         color: transparent;
+        background-image: linear-gradient(to right, #EF4444, #FB7185);
     }
 
     .beneficiary-details {
-        color: var(--text-gray);
-        font-size: 1rem;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
         margin-bottom: 1rem;
     }
 
@@ -97,28 +94,32 @@
         display: inline-flex;
         align-items: center;
         gap: 0.375rem;
-        padding: 0.375rem 1rem;
-        background-color: var(--primary-light);
+        padding: 0.25rem 0.75rem;
+        background-color: rgba(239, 68, 68, 0.1);
         color: var(--primary);
         border-radius: 9999px;
         font-weight: 500;
-        font-size: 0.875rem;
+        font-size: 0.75rem;
     }
 
     .section-header {
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        background-color: var(--secondary-light);
     }
 
     .section-title {
-        font-size: 1.125rem;
+        font-size: 1rem;
         font-weight: 600;
-        color: var(--text-dark);
+        color: var(--text-primary);
         margin: 0;
+    }
+
+    .section-icon {
+        color: var(--primary);
+        font-size: 0.875rem;
     }
 
     .section-content {
@@ -136,81 +137,69 @@
     }
 
     .info-label {
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         color: var(--text-light);
-        margin-bottom: 0.375rem;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
     }
 
     .info-value {
-        font-size: 1rem;
-        color: var(--text-dark);
+        font-size: 0.9375rem;
+        color: var(--text-primary);
         font-weight: 500;
     }
 
+    /* Document Attachments */
     .documents-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
     .document-item {
-        border: 1px solid var(--border);
-        border-radius: 0.75rem;
-        overflow: hidden;
-        transition: all 0.2s;
-    }
-
-    .document-item:hover {
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-
-    .document-preview {
-        height: 180px;
-        background-color: #f1f5f9;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .document-preview img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
-
-    .document-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.3);
-        opacity: 0;
-        transition: opacity 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .document-item:hover .document-overlay {
-        opacity: 1;
-    }
-
-    .document-info {
-        padding: 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: white;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        background-color: #f9fafb;
+        transition: all 0.2s ease;
+    }
+
+    .document-item:hover {
+        border-color: #d1d5db;
+        background-color: #f3f4f6;
+    }
+
+    .document-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .document-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.375rem;
+        background-color: rgba(239, 68, 68, 0.1);
+        color: var(--primary);
     }
 
     .document-details {
-        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .document-title {
-        font-weight: 600;
-        font-size: 1rem;
-        color: var(--text-dark);
-        margin-bottom: 0.25rem;
+        font-weight: 500;
+        font-size: 0.9375rem;
+        color: var(--text-primary);
+        margin-bottom: 0.125rem;
     }
 
     .document-date {
@@ -227,23 +216,36 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 2.25rem;
-        height: 2.25rem;
-        border-radius: 0.5rem;
-        background-color: var(--secondary-light);
-        color: var(--text-gray);
-        border: none;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.375rem;
+        background-color: white;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
         transition: all 0.2s;
     }
 
     .document-btn:hover {
         background-color: var(--primary);
         color: white;
+        border-color: var(--primary);
     }
 
     @media (max-width: 768px) {
-        .info-grid, .documents-list {
+        .info-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .document-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .document-actions {
+            width: 100%;
+            justify-content: flex-end;
         }
     }
 </style>
@@ -254,7 +256,7 @@
     <div class="page-header">
         <a href="{{ route('beneficiaire.index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i>
-            <span>Retour</span>
+            <span>Retour à la liste</span>
         </a>
     </div>
     
@@ -270,7 +272,7 @@
         
         <!-- Personal Information Section -->
         <div class="section-header">
-            <i class="fas fa-user text-primary"></i>
+            <i class="fas fa-user section-icon"></i>
             <h2 class="section-title">Informations personnelles</h2>
         </div>
         <div class="section-content">
@@ -316,141 +318,118 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Documents Section -->
+    </div>
+    
+    <!-- Documents Section -->
+    <div class="main-card">
         <div class="section-header">
-            <i class="fas fa-file-alt text-primary"></i>
+            <i class="fas fa-file-alt section-icon"></i>
             <h2 class="section-title">Documents officiels</h2>
         </div>
         <div class="section-content">
             <div class="documents-list">
                 <!-- Photo Document -->
                 <div class="document-item">
-                    <div class="document-preview">
-                        <img src="{{ asset('storage/' . $beneficiaire->photo_path) }}" alt="Photo d'identité">
-                        <div class="document-overlay">
-                            <a href="{{ asset('storage/' . $beneficiaire->photo_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
-                    </div>
                     <div class="document-info">
+                        <div class="document-icon">
+                            <i class="fas fa-id-badge"></i>
+                        </div>
                         <div class="document-details">
                             <div class="document-title">Photo d'identité</div>
                             <div class="document-date">Ajouté le {{ $beneficiaire->created_at->format('d/m/Y') }}</div>
                         </div>
-                        <div class="document-actions">
-                            <a href="{{ asset('storage/' . $beneficiaire->photo_path) }}" target="_blank" class="document-btn" title="Visualiser">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ asset('storage/' . $beneficiaire->photo_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="{{ asset('storage/' . $beneficiaire->photo_path) }}" target="_blank" class="document-btn" title="Visualiser">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ asset('storage/' . $beneficiaire->photo_path) }}" download class="document-btn" title="Télécharger">
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
                 </div>
                 
                 <!-- CIN Document -->
                 <div class="document-item">
-                    <div class="document-preview">
-                        <img src="{{ asset('storage/' . $beneficiaire->cin_path) }}" alt="CIN" onerror="this.src='https://placehold.co/600x400?text=CIN+Document';this.onerror='';">
-                        <div class="document-overlay">
-                            <a href="{{ asset('storage/' . $beneficiaire->cin_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
-                    </div>
                     <div class="document-info">
+                        <div class="document-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
                         <div class="document-details">
                             <div class="document-title">Carte d'identité nationale</div>
                             <div class="document-date">Ajouté le {{ $beneficiaire->created_at->format('d/m/Y') }}</div>
                         </div>
-                        <div class="document-actions">
-                            <a href="{{ asset('storage/' . $beneficiaire->cin_path) }}" target="_blank" class="document-btn" title="Visualiser">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ asset('storage/' . $beneficiaire->cin_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="{{ asset('storage/' . $beneficiaire->cin_path) }}" target="_blank" class="document-btn" title="Visualiser">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ asset('storage/' . $beneficiaire->cin_path) }}" download class="document-btn" title="Télécharger">
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
                 </div>
                 
                 <!-- Baccalauréat Document -->
                 <div class="document-item">
-                    <div class="document-preview">
-                        <img src="{{ asset('storage/' . $beneficiaire->baccalaureat_path) }}" alt="Baccalauréat" onerror="this.src='https://placehold.co/600x400?text=Baccalauréat';this.onerror='';">
-                        <div class="document-overlay">
-                            <a href="{{ asset('storage/' . $beneficiaire->baccalaureat_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
-                    </div>
                     <div class="document-info">
+                        <div class="document-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
                         <div class="document-details">
                             <div class="document-title">Baccalauréat</div>
                             <div class="document-date">Ajouté le {{ $beneficiaire->created_at->format('d/m/Y') }}</div>
                         </div>
-                        <div class="document-actions">
-                            <a href="{{ asset('storage/' . $beneficiaire->baccalaureat_path) }}" target="_blank" class="document-btn" title="Visualiser">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ asset('storage/' . $beneficiaire->baccalaureat_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="{{ asset('storage/' . $beneficiaire->baccalaureat_path) }}" target="_blank" class="document-btn" title="Visualiser">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ asset('storage/' . $beneficiaire->baccalaureat_path) }}" download class="document-btn" title="Télécharger">
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
                 </div>
                 
                 <!-- Acte Document -->
                 <div class="document-item">
-                    <div class="document-preview">
-                        <img src="{{ asset('storage/' . $beneficiaire->acte_path) }}" alt="Acte" onerror="this.src='https://placehold.co/600x400?text=Acte';this.onerror='';">
-                        <div class="document-overlay">
-                            <a href="{{ asset('storage/' . $beneficiaire->acte_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
-                    </div>
                     <div class="document-info">
+                        <div class="document-icon">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
                         <div class="document-details">
                             <div class="document-title">Acte</div>
                             <div class="document-date">Ajouté le {{ $beneficiaire->created_at->format('d/m/Y') }}</div>
                         </div>
-                        <div class="document-actions">
-                            <a href="{{ asset('storage/' . $beneficiaire->acte_path) }}" target="_blank" class="document-btn" title="Visualiser">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ asset('storage/' . $beneficiaire->acte_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="{{ asset('storage/' . $beneficiaire->acte_path) }}" target="_blank" class="document-btn" title="Visualiser">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ asset('storage/' . $beneficiaire->acte_path) }}" download class="document-btn" title="Télécharger">
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
                 </div>
                 
                 <!-- Relevé de notes Document -->
                 <div class="document-item">
-                    <div class="document-preview">
-                        <img src="{{ asset('storage/' . $beneficiaire->releve_notes_path) }}" alt="Relevé de notes" onerror="this.src='https://placehold.co/600x400?text=Relevé+de+Notes';this.onerror='';">
-                        <div class="document-overlay">
-                            <a href="{{ asset('storage/' . $beneficiaire->releve_notes_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
-                    </div>
                     <div class="document-info">
+                        <div class="document-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
                         <div class="document-details">
                             <div class="document-title">Relevé de notes</div>
                             <div class="document-date">Ajouté le {{ $beneficiaire->created_at->format('d/m/Y') }}</div>
                         </div>
-                        <div class="document-actions">
-                            <a href="{{ asset('storage/' . $beneficiaire->releve_notes_path) }}" target="_blank" class="document-btn" title="Visualiser">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ asset('storage/' . $beneficiaire->releve_notes_path) }}" download class="document-btn" title="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="{{ asset('storage/' . $beneficiaire->releve_notes_path) }}" target="_blank" class="document-btn" title="Visualiser">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ asset('storage/' . $beneficiaire->releve_notes_path) }}" download class="document-btn" title="Télécharger">
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
                 </div>
             </div>

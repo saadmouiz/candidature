@@ -24,10 +24,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     
     // In routes/web.php
-Route::get('/admin/stats', [App\Http\Controllers\AdminController::class, 'getStats'])->name('admin.stats');
+    Route::get('/admin/stats', [App\Http\Controllers\AdminController::class, 'getStats'])->name('admin.stats');
 
     // Gestion des candidatures
     Route::get('/admin/candidatures', [CandidatureController::class, 'index'])->name('candidature.index');
+    
+    // Important: Les routes statiques AVANT les routes avec des paramètres
+    // Routes pour les vues de candidatures spécifiques (acceptées/refusées)
+    Route::get('/admin/candidatures/acceptees', [CandidatureController::class, 'acceptees'])->name('candidature.acceptees');
+    Route::get('/admin/candidatures/refusees', [CandidatureController::class, 'refusees'])->name('candidature.refusees');
+    
+    // Routes avec des paramètres wildcard (doivent venir APRÈS les routes statiques)
     Route::get('/admin/candidatures/{candidature}', [CandidatureController::class, 'show'])->name('candidature.show');
     Route::post('/admin/candidatures/{candidature}/accepter', [CandidatureController::class, 'accepter'])->name('candidature.accepter');
     Route::post('/admin/candidatures/{candidature}/refuser', [CandidatureController::class, 'refuser'])->name('candidature.refuser');
@@ -35,14 +42,6 @@ Route::get('/admin/stats', [App\Http\Controllers\AdminController::class, 'getSta
     // Gestion des bénéficiaires
     Route::get('/admin/beneficiaires', [BeneficiaireController::class, 'index'])->name('beneficiaire.index');
     Route::get('/admin/beneficiaires/{beneficiaire}', [BeneficiaireController::class, 'show'])->name('beneficiaire.show');
-    
-
-    
-    // Éventuellement, ajoutez ces routes pour voir les candidatures acceptées et refusées
-    Route::get('/admin/candidatures/acceptees', [CandidatureController::class, 'acceptees'])->name('candidature.acceptees');
-   
-    Route::get('/admin/candidatures/refusees', [CandidatureController::class, 'refusees'])->name('candidature.refusees');
-
 });
 
 // Routes d'authentification générées par Laravel UI
