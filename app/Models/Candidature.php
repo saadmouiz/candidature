@@ -28,4 +28,8 @@ class Candidature extends Model
     {
         return $this->hasOne(Beneficiaire::class);
     }
+    public function admin()
+{
+    return $this->belongsTo(User::class, 'admin_id');
+}
 }

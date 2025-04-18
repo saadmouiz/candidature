@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidature;
 use App\Models\Beneficiaire;
+use App\Models\Refusee;
 use App\Mail\ConfirmationCandidature;
 use App\Mail\CandidatureAcceptee;
 use Illuminate\Http\Request;
@@ -122,10 +123,9 @@ class CandidatureController extends Controller
     }
 
     public function refusees()
-    {
-        $candidatures = Candidature::where('status', 'refuse')->paginate(10);
-        return view('candidatures.refusees', compact('candidatures'));
-    }
-    
+{
+    $refusees = Refusee::with('admin')->paginate(10);
+    return view('candidatures.refusees', compact('refusees'));
+}
 
 }

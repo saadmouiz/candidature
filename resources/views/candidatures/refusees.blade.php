@@ -374,12 +374,12 @@
                     <i class="fa-solid fa-times-circle"></i> Liste des candidatures refusées
                 </div>
                 <div class="results-count">
-                    <span id="visibleCount">{{ $candidatures->count() }}</span> résultats
+                    <span id="visibleCount">{{ $refusees->count() }}</span> résultats
                 </div>
             </div>
             
             <div class="table-content">
-                @if($candidatures->count() > 0)
+                @if($refusees->count() > 0)
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -395,38 +395,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($candidatures as $candidature)
+                                @foreach ($refusees as $refusee)
                                     <tr class="candidature-row">
-                                        <td>#{{ $candidature->id }}</td>
+                                        <td>#{{ $refusee->id }}</td>
                                         <td>
                                             <div class="user-cell">
-                                                <div class="user-name">{{ $candidature->nom }} {{ $candidature->prenom }}</div>
-                                                <div class="user-email">Refusée par: </div>
+                                                <div class="user-name">{{ $refusee->nom }} {{ $refusee->prenom }}</div>
+                                                <div class="user-email">Refusée par: {{ $refusee->admin ? $refusee->admin->name : 'Admin inconnu' }}</div>
                                             </div>
                                         </td>
-                                        <td>{{ $candidature->cin }}</td>
+                                        <td>{{ $refusee->cin }}</td>
                                         <td>
                                             @php
                                                 $levelClass = 'status-bac';
-                                                if (str_contains(strtolower($candidature->niveau_scolaire), 'bac+2')) {
+                                                if (str_contains(strtolower($refusee->niveau_scolaire), 'bac+2')) {
                                                     $levelClass = 'status-bac2';
-                                                } elseif (str_contains(strtolower($candidature->niveau_scolaire), 'bac+3')) {
+                                                } elseif (str_contains(strtolower($refusee->niveau_scolaire), 'bac+3')) {
                                                     $levelClass = 'status-bac3';
                                                 }
                                             @endphp
                                             <span class="status-pill {{ $levelClass }}">
-                                                {{ $candidature->niveau_scolaire }}
+                                                {{ $refusee->niveau_scolaire }}
                                             </span>
                                         </td>
-                                        <td>{{ $candidature->email }}</td>
-                                        <td>{{ $candidature->tel }}</td>
-                                        <td>{{ $candidature->updated_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{ $refusee->email }}</td>
+                                        <td>{{ $refusee->tel }}</td>
+                                        <td>{{ $refusee->created_at->format('d/m/Y H:i') }}</td>
                                         <td>
-                                            <div class="actions-cell">
-                                                <a href="{{ route('candidature.show', $candidature->id) }}" class="action-btn" title="Voir les détails">
-                                                    <i class="fa-solid fa-eye"></i>
-                                                </a>
-                                            </div>
+                                           
                                         </td>
                                     </tr>
                                 @endforeach
@@ -435,7 +431,7 @@
                     </div>
                     
                     <div class="pagination-container">
-                        {{ $candidatures->links() }}
+                        {{ $refusees->links() }}
                     </div>
                 @else
                     <div class="empty-state">
