@@ -422,7 +422,11 @@
                                         <td>{{ $refusee->tel }}</td>
                                         <td>{{ $refusee->created_at->format('d/m/Y H:i') }}</td>
                                         <td>
-                                           
+                                            <div class="actions-cell">
+                                                <a href="{{ route('refusee-show', $refusee->id) }}" class="action-btn" title="Voir les détails">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

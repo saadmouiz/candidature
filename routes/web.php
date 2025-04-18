@@ -5,6 +5,7 @@ use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BeneficiaireController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RefuseeController; // Add this import
 use Illuminate\Support\Facades\Auth;
 
 // Routes publiques
@@ -33,6 +34,9 @@ Route::middleware(['auth'])->group(function () {
     // Routes pour les vues de candidatures spécifiques (acceptées/refusées)
     Route::get('/admin/candidatures/acceptees', [CandidatureController::class, 'acceptees'])->name('candidature.acceptees');
     Route::get('/admin/candidatures/refusees', [CandidatureController::class, 'refusees'])->name('candidature.refusees');
+    
+    // Ajouter cette route pour afficher les détails d'une candidature refusée
+    Route::get('/admin/refusees/{refusee}', [RefuseeController::class, 'show'])->name('refusee-show');
     
     // Routes avec des paramètres wildcard (doivent venir APRÈS les routes statiques)
     Route::get('/admin/candidatures/{candidature}', [CandidatureController::class, 'show'])->name('candidature.show');

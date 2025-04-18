@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     <h2>Détails de la candidature refusée</h2>
-                    <a href="{{ route('refusee.index') }}" class="btn btn-secondary float-right">Retour à la liste</a>
+                    <a href="{{ route('candidature.refusees') }}" class="btn btn-secondary float-right">Retour à la liste</a>
                 </div>
 
                 <div class="card-body">

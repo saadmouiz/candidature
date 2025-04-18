@@ -110,13 +110,32 @@ class CandidatureController extends Controller
     return redirect()->back()->with('success', 'Candidature acceptée avec succès');
 }
 
-    public function refuser(Candidature $candidature)
-    {
-        $candidature->update(['status' => 'refuse']);
-        
-        return redirect()->back()->with('success', 'Candidature refusée avec succès');
-    }
+public function refuser(Candidature $candidature, Request $request)
+{
+    // Update candidature status
+    $candidature->update(['status' => 'refuse']);
     
+    // Create record in refusees table
+    Refusee::create([
+        'candidature_id' => $candidature->id,
+        'nom' => $candidature->nom,
+        'prenom' => $candidature->prenom,
+        'cin' => $candidature->cin,
+        'date_naissance' => $candidature->date_naissance,
+        'email' => $candidature->email,
+        'tel' => $candidature->tel,
+        'niveau_scolaire' => $candidature->niveau_scolaire,
+        'baccalaureat_path' => $candidature->baccalaureat_path,
+        'cin_path' => $candidature->cin_path,
+        'acte_path' => $candidature->acte_path,
+        'releve_notes_path' => $candidature->releve_notes_path,
+        'photo_path' => $candidature->photo_path,
+        'admin_id' => Auth::id(),
+        'raison_refus' => $request->input('raison_refus', 'Aucune raison spécifiée') // Default value if no reason provided
+    ]);
+    
+    return redirect()->back()->with('success', 'Candidature refusée avec succès');
+}
     public function show(Candidature $candidature)
     {
         return view('candidatures.show', compact('candidature'));
