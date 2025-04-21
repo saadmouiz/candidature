@@ -150,7 +150,7 @@
         <nav class="max-w-7xl mx-auto bg-white border border-gray-100/50 backdrop-blur-md rounded-2xl shadow-soft px-6 py-4 transition-all duration-300">
             <div class="flex justify-between items-center">
                 <a href="#" class="text-xl font-medium relative group">
-                    <img src="{{ asset('assets/logo_ico.png') }}" alt="Logo Al Amal" class="w-10 h-10">
+                    <img src="{{ asset('assets/logo_ico.png') }}" alt="Logo Al Amal" class="w-40 h-50">
                 </a>
                 
                 <!-- Desktop Menu -->
@@ -512,7 +512,7 @@
             <div class="grid md:grid-cols-4 gap-12">
                 <div class="col-span-2 md:col-span-1">
                         <a href="#" class="text-xl font-medium inline-flex items-center">
-                           <img src="{{ asset('assets/logo_ico.png') }}" alt="Logo Al Amal" class="w-10 h-10">
+                           <img src="{{ asset('assets/logo_ico.png') }}" alt="Logo Al Amal" class="w-40 h-50">
                         </a>
                         <p class="text-gray-600 mt-4 mb-6">Ensemble vers un avenir meilleur à travers l'éducation et l'accompagnement personnalisé.</p>
                         <div class="flex space-x-4">

@@ -199,6 +199,7 @@
                             <option value="bac" {{ old('niveau_scolaire') == 'bac' ? 'selected' : '' }}>Bac</option>
                             <option value="bac+2" {{ old('niveau_scolaire') == 'bac+2' ? 'selected' : '' }}>Bac+2</option>
                             <option value="bac+3" {{ old('niveau_scolaire') == 'bac+3' ? 'selected' : '' }}>Bac+3</option>
+                            <option value="Autre" {{ old('niveau_scolaire') == 'autre' ? 'selected' : '' }}>Autre</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none top-6">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -271,7 +272,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </div>
-                                <label for="acte_doc" class="block text-sm font-medium text-gray-700">Acte</label>
+                                <label for="acte_doc" class="block text-sm font-medium text-gray-700">Acte de naissance</label>
                             </div>
                             <div class="relative file-input-wrapper">
                                 <input type="file" id="acte_doc" name="acte_doc" required

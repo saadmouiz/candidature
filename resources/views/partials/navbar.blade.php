@@ -6,7 +6,7 @@
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <a href="{{ url('/') }}" class="flex items-center">
-                        <img src="{{ asset('/assets/logo_ico.png') }}" alt="Logo" class="h-10 w-auto">
+                        <img src="{{ asset('/assets/logo_ico.png') }}" alt="Logo" class="h-10 w-50">
                     </a>
                 </div>
             </div>
