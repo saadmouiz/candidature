@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- Dans votre header -->
 <script src="https://cdn.tailwindcss.com"></script>
-    <title>{{ config('app.name', 'Laravel') }} - Administration</title>
+    <title>{{ config('app.name', '') }} - Administration</title>
 
   
 </head>

@@ -143,9 +143,9 @@
             background-image: linear-gradient(to right, #EF4444, #FB7185);
         }
     </style>
-</head>
+</head> 
 <body class="bg-white font-sans text-dark antialiased overflow-x-hidden" x-data="{ isOpen: false }">
-    <!-- NAVBAR -->
+    <!-- NAVBAR --> 
     <header class="fixed w-full z-50 px-4 py-5">
         <nav class="max-w-7xl mx-auto bg-white border border-gray-100/50 backdrop-blur-md rounded-2xl shadow-soft px-6 py-4 transition-all duration-300">
             <div class="flex justify-between items-center">

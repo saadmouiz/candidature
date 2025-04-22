@@ -63,7 +63,12 @@
             
             <p>Si vous avez des questions, n'hésitez pas à nous contacter par email ou par téléphone.</p>
             
-            <p>Encore félicitations et bienvenue parmi nous!</p>
+           <!-- Dans resources/views/emails/candidature-acceptee.blade.php -->
+<!-- Ajoutez ce code quelque part dans la section content -->
+
+<p>Nous avons joint à cet email un contrat officialisant votre acceptation. Veuillez l'imprimer, le signer et nous le retourner dans les plus brefs délais.</p>
+
+<p>Si vous ne parvenez pas à ouvrir la pièce jointe, vous pouvez également <a href="{{ URL::signedRoute('contrats.telecharger', ['candidature' => $candidature->id]) }}">télécharger le contrat ici</a>.</p>
             
             <p>Cordialement,<br>
             L'équipe du programme</p>

@@ -42,7 +42,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/candidatures/{candidature}', [CandidatureController::class, 'show'])->name('candidature.show');
     Route::post('/admin/candidatures/{candidature}/accepter', [CandidatureController::class, 'accepter'])->name('candidature.accepter');
     Route::post('/admin/candidatures/{candidature}/refuser', [CandidatureController::class, 'refuser'])->name('candidature.refuser');
-    
+    Route::get('/contrats/{candidature}', [CandidatureController::class, 'telechargerContrat'])
+    ->name('contrats.telecharger')
+    ->middleware('signed'); // Protection par signature URL
     // Gestion des bénéficiaires
     Route::get('/admin/beneficiaires', [BeneficiaireController::class, 'index'])->name('beneficiaire.index');
     Route::get('/admin/beneficiaires/{beneficiaire}', [BeneficiaireController::class, 'show'])->name('beneficiaire.show');

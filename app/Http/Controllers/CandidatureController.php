@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
+use PDF;
 
 class CandidatureController extends Controller
 {
@@ -147,4 +148,22 @@ public function refuser(Candidature $candidature, Request $request)
     return view('candidatures.refusees', compact('refusees'));
 }
 
+
+public function telechargerContrat(Request $request, Candidature $candidature)
+{
+    // Vérifier que l'URL est signée (sécurité)
+    if (!$request->hasValidSignature()) {
+        abort(401, 'URL non autorisée ou expirée.');
+    }
+    
+    // Vérifier que la candidature est bien acceptée
+    if ($candidature->status !== 'accepte') {
+        abort(403, 'Cette candidature n\'a pas été acceptée.');
+    }
+    
+    // Générer le contrat
+    $pdf = PDF::loadView('pdfs.contrat', ['candidature' => $candidature]);
+    
+    return $pdf->download('contrat-' . $candidature->id . '.pdf');
+}
 }
