@@ -25,6 +25,11 @@ class Beneficiaire extends Model
         'releve_notes_path',
         'photo_path',
         'admin_id',
+        'has_appointment',
+        'appointment_date',
+        'appointment_sent_at',
+        'attendance_confirmed',
+        'attendance_confirmed_at',
     ];
 
     public function candidature()

@@ -231,6 +231,90 @@
         border-color: var(--primary);
     }
 
+    /* Appointment Section */
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .action-btn:hover {
+        background-color: var(--primary-hover);
+        color: white;
+        text-decoration: none;
+    }
+
+    .action-btn.secondary {
+        background-color: #4b5563;
+    }
+
+    .action-btn.secondary:hover {
+        background-color: #374151;
+    }
+
+    .action-btn.success {
+        background-color: #10b981;
+    }
+
+    .action-btn.success:hover {
+        background-color: #059669;
+    }
+
+    .appointment-info {
+        background-color: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem;
+        border-radius: 0.375rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .appointment-label {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .appointment-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .appointment-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .appointment-item-label {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .appointment-item-value {
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+    .attendance-confirmed {
+        background-color: #ecfdf5;
+        border-left: 4px solid #10b981;
+    }
+
+    .attendance-confirmed .appointment-label {
+        color: #10b981;
+    }
+
     @media (max-width: 768px) {
         .info-grid {
             grid-template-columns: 1fr;
@@ -253,6 +337,18 @@
 
 @section('content')
 <div class="beneficiary-container">
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="page-header">
         <a href="{{ route('beneficiaire.index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i>
@@ -317,6 +413,72 @@
                     <div class="info-value">{{ $beneficiaire->admin ? $beneficiaire->admin->name : 'Non spécifié' }}</div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Appointment Section -->
+    <div class="main-card">
+        <div class="section-header">
+            <i class="fas fa-calendar-alt section-icon"></i>
+            <h2 class="section-title">Suivi de rendez-vous</h2>
+        </div>
+        <div class="section-content">
+            @if ($beneficiaire->has_appointment && $beneficiaire->attendance_confirmed)
+                <div class="appointment-info attendance-confirmed">
+                    <div class="appointment-label">Rendez-vous effectué</div>
+                    <div class="appointment-details">
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Date du rendez-vous</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->appointment_date)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Date d'envoi</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->appointment_sent_at)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Présence confirmée le</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->attendance_confirmed_at)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Status</div>
+                            <div class="appointment-item-value">Processus complété</div>
+                        </div>
+                    </div>
+                </div>
+            @elseif ($beneficiaire->has_appointment)
+                <div class="appointment-info">
+                    <div class="appointment-label">Rendez-vous programmé</div>
+                    <div class="appointment-details">
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Date du rendez-vous</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->appointment_date)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Date d'envoi</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->appointment_sent_at)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Status</div>
+                            <div class="appointment-item-value">En attente de confirmation de présence</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <form action="{{ route('beneficiaire.attendance.confirm', $beneficiaire) }}" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" class="action-btn success">
+                        <i class="fas fa-check"></i>
+                        <span>Confirmer la présence</span>
+                    </button>
+                </form>
+            @else
+                <p>Aucun rendez-vous n'a encore été programmé pour ce bénéficiaire.</p>
+                
+                <a href="{{ route('beneficiaire.appointment.create', $beneficiaire) }}" class="action-btn">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Programmer un rendez-vous</span>
+                </a>
+            @endif
         </div>
     </div>
     

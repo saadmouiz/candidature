@@ -48,6 +48,16 @@ Route::middleware(['auth'])->group(function () {
     // Gestion des bénéficiaires
     Route::get('/admin/beneficiaires', [BeneficiaireController::class, 'index'])->name('beneficiaire.index');
     Route::get('/admin/beneficiaires/{beneficiaire}', [BeneficiaireController::class, 'show'])->name('beneficiaire.show');
+    
+    // Routes pour les rendez-vous
+    Route::get('/admin/beneficiaires/{beneficiaire}/rendez-vous', [BeneficiaireController::class, 'createAppointment'])->name('beneficiaire.appointment.create');
+    Route::post('/admin/beneficiaires/{beneficiaire}/rendez-vous', [BeneficiaireController::class, 'storeAppointment'])->name('beneficiaire.appointment.store');
+    Route::post('/admin/beneficiaires/{beneficiaire}/presence', [BeneficiaireController::class, 'confirmAttendance'])->name('beneficiaire.attendance.confirm');
+    
+    // Route pour télécharger le document de rendez-vous
+    Route::get('/rendez-vous/{beneficiaire}', [BeneficiaireController::class, 'downloadAppointment'])
+        ->name('appointments.download')
+        ->middleware('signed');
 });
 
 // Routes d'authentification générées par Laravel UI

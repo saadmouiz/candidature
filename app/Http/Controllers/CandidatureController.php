@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 use PDF;
+use App\Services\ContractPdfGenerator;
 
 class CandidatureController extends Controller
 {
@@ -82,88 +83,99 @@ class CandidatureController extends Controller
     }
 
     public function accepter(Candidature $candidature)
-{
-    $candidature->update(['status' => 'accepte']);
+    {
+        $candidature->update(['status' => 'accepte']);
+        
+        // Créer un bénéficiaire avec toutes les données de la candidature + admin connecté
+        Beneficiaire::create([
+            'candidature_id' => $candidature->id,
+            'nom' => $candidature->nom,
+            'prenom' => $candidature->prenom,
+            'cin' => $candidature->cin,
+            'date_naissance' => $candidature->date_naissance,
+            'email' => $candidature->email,
+            'tel' => $candidature->tel,
+            'niveau_scolaire' => $candidature->niveau_scolaire,
+            'baccalaureat_path' => $candidature->baccalaureat_path,
+            'cin_path' => $candidature->cin_path,
+            'acte_path' => $candidature->acte_path,
+            'releve_notes_path' => $candidature->releve_notes_path,
+            'photo_path' => $candidature->photo_path,
+            'admin_id' => auth()->id() // Stocke l'ID de l'admin
+        ]);
+        
+        // Envoi de l'email d'acceptation
+        Mail::to($candidature->email)->send(new CandidatureAcceptee($candidature));
 
-    
-    // Créer un bénéficiaire avec toutes les données de la candidature + admin connecté
-    Beneficiaire::create([
-        'candidature_id' => $candidature->id,
-        'nom' => $candidature->nom,
-        'prenom' => $candidature->prenom,
-        'cin' => $candidature->cin,
-        'date_naissance' => $candidature->date_naissance,
-        'email' => $candidature->email,
-        'tel' => $candidature->tel,
-        'niveau_scolaire' => $candidature->niveau_scolaire,
-        'baccalaureat_path' => $candidature->baccalaureat_path,
-        'cin_path' => $candidature->cin_path,
-        'acte_path' => $candidature->acte_path,
-        'releve_notes_path' => $candidature->releve_notes_path,
-        'photo_path' => $candidature->photo_path,
-        'admin_id' => auth()->id() // Stocke l'ID de l'admin
-    ]);
-    
+        return redirect()->back()->with('success', 'Candidature acceptée avec succès');
+    }
 
-    // Envoi de l'email d'acceptation
-    Mail::to($candidature->email)->send(new CandidatureAcceptee($candidature));
+    public function refuser(Candidature $candidature, Request $request)
+    {
+        // Update candidature status
+        $candidature->update(['status' => 'refuse']);
+        
+        // Create record in refusees table
+        Refusee::create([
+            'candidature_id' => $candidature->id,
+            'nom' => $candidature->nom,
+            'prenom' => $candidature->prenom,
+            'cin' => $candidature->cin,
+            'date_naissance' => $candidature->date_naissance,
+            'email' => $candidature->email,
+            'tel' => $candidature->tel,
+            'niveau_scolaire' => $candidature->niveau_scolaire,
+            'baccalaureat_path' => $candidature->baccalaureat_path,
+            'cin_path' => $candidature->cin_path,
+            'acte_path' => $candidature->acte_path,
+            'releve_notes_path' => $candidature->releve_notes_path,
+            'photo_path' => $candidature->photo_path,
+            'admin_id' => Auth::id(),
+            'raison_refus' => $request->input('raison_refus', 'Aucune raison spécifiée') // Default value if no reason provided
+        ]);
+        
+        return redirect()->back()->with('success', 'Candidature refusée avec succès');
+    }
 
-    return redirect()->back()->with('success', 'Candidature acceptée avec succès');
-}
-
-public function refuser(Candidature $candidature, Request $request)
-{
-    // Update candidature status
-    $candidature->update(['status' => 'refuse']);
-    
-    // Create record in refusees table
-    Refusee::create([
-        'candidature_id' => $candidature->id,
-        'nom' => $candidature->nom,
-        'prenom' => $candidature->prenom,
-        'cin' => $candidature->cin,
-        'date_naissance' => $candidature->date_naissance,
-        'email' => $candidature->email,
-        'tel' => $candidature->tel,
-        'niveau_scolaire' => $candidature->niveau_scolaire,
-        'baccalaureat_path' => $candidature->baccalaureat_path,
-        'cin_path' => $candidature->cin_path,
-        'acte_path' => $candidature->acte_path,
-        'releve_notes_path' => $candidature->releve_notes_path,
-        'photo_path' => $candidature->photo_path,
-        'admin_id' => Auth::id(),
-        'raison_refus' => $request->input('raison_refus', 'Aucune raison spécifiée') // Default value if no reason provided
-    ]);
-    
-    return redirect()->back()->with('success', 'Candidature refusée avec succès');
-}
     public function show(Candidature $candidature)
     {
         return view('candidatures.show', compact('candidature'));
     }
 
     public function refusees()
-{
-    $refusees = Refusee::with('admin')->paginate(10);
-    return view('candidatures.refusees', compact('refusees'));
-}
-
-
-public function telechargerContrat(Request $request, Candidature $candidature)
-{
-    // Vérifier que l'URL est signée (sécurité)
-    if (!$request->hasValidSignature()) {
-        abort(401, 'URL non autorisée ou expirée.');
+    {
+        $refusees = Refusee::with('admin')->paginate(10);
+        return view('candidatures.refusees', compact('refusees'));
     }
-    
-    // Vérifier que la candidature est bien acceptée
-    if ($candidature->status !== 'accepte') {
-        abort(403, 'Cette candidature n\'a pas été acceptée.');
+
+    public function telechargerContrat(Request $request, Candidature $candidature, ContractPdfGenerator $contractGenerator)
+    {
+        // Vérifier que l'URL est signée (sécurité)
+        if (!$request->hasValidSignature()) {
+            abort(401, 'URL non autorisée ou expirée.');
+        }
+        
+        // Vérifier que la candidature est bien acceptée
+        if ($candidature->status !== 'accepte') {
+            abort(403, 'Cette candidature n\'a pas été acceptée.');
+        }
+        
+        try {
+            // Check if GD extension is loaded
+            $includeImages = extension_loaded('gd');
+            
+            // Générer le contrat
+            $pdf = $contractGenerator->generate($candidature, $includeImages);
+            
+            return $pdf->download('contrat-' . $candidature->id . '.pdf');
+        } catch (\Exception $e) {
+            \Log::error('Failed to generate contract PDF for download: ' . $e->getMessage());
+            
+            return response()
+                ->view('errors.pdf-generation-failed-contract', [
+                    'candidature' => $candidature,
+                    'error' => $e->getMessage()
+                ], 500);
+        }
     }
-    
-    // Générer le contrat
-    $pdf = PDF::loadView('pdfs.contrat', ['candidature' => $candidature]);
-    
-    return $pdf->download('contrat-' . $candidature->id . '.pdf');
-}
 }
