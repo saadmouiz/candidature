@@ -131,4 +131,57 @@ class BeneficiaireController extends Controller
         return redirect()->route('beneficiaire.show', $beneficiaire)
             ->with('success', 'La présence du bénéficiaire a été confirmée avec succès.');
     }
+    
+    /**
+     * Record that the beneficiary did not attend their appointment
+     */
+    public function recordAbsence(Beneficiaire $beneficiaire)
+    {
+        // Check if beneficiary has an appointment
+        if (!$beneficiaire->has_appointment) {
+            return redirect()->route('beneficiaire.show', $beneficiaire)
+                ->with('error', 'Ce bénéficiaire n\'a pas de rendez-vous programmé.');
+        }
+        
+        // Update beneficiary with absence record
+        $beneficiaire->did_not_attend = true;
+        $beneficiaire->absence_recorded_at = now();
+        $beneficiaire->save();
+        
+        return redirect()->route('beneficiaire.show', $beneficiaire)
+            ->with('warning', 'L\'absence du bénéficiaire a été enregistrée.');
+    }
+    
+    /**
+     * Display a calendar view of all appointments
+     */
+    public function calendar()
+    {
+        // Get all beneficiaries with appointments
+        $beneficiaires = Beneficiaire::where('has_appointment', true)
+            ->orderBy('appointment_date')
+            ->get();
+        
+        // Group appointments by date for the calendar view
+        $appointments = [];
+        
+        foreach ($beneficiaires as $beneficiaire) {
+            $date = \Carbon\Carbon::parse($beneficiaire->appointment_date)->format('Y-m-d');
+            
+            if (!isset($appointments[$date])) {
+                $appointments[$date] = [];
+            }
+            
+            $appointments[$date][] = [
+                'id' => $beneficiaire->id,
+                'name' => $beneficiaire->prenom . ' ' . $beneficiaire->nom,
+                'time' => \Carbon\Carbon::parse($beneficiaire->appointment_date)->format('H:i'),
+                'status' => $beneficiaire->attendance_confirmed ? 'confirmed' : 
+                           ($beneficiaire->did_not_attend ? 'absent' : 'pending'),
+                'beneficiaire' => $beneficiaire
+            ];
+        }
+        
+        return view('beneficiaires.calendar', compact('appointments'));
+    }
 }

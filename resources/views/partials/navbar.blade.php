@@ -25,6 +25,9 @@
                         Bénéficiaires
                     </a>
 
+                    <a href="{{ route('beneficiaire.calendar') }}" class="text-gray-700 hover:text-red-500 px-3 py-2 text-sm font-medium transition duration-150 {{ request()->routeIs('beneficiaire.calendar') ? 'text-red-500 font-semibold' : '' }}">
+                        Calendrier
+                    </a>
                     
                     <!-- Candidatures Dropdown -->
                     <div class="relative" x-data="{ open: false }">
@@ -115,6 +118,9 @@
             @else
                 <a href="{{ route('beneficiaire.index') }}" class="block px-4 py-2 text-base font-medium text-gray-700 hover:text-red-500 hover:bg-gray-50 {{ request()->routeIs('beneficiaire.*') ? 'text-red-500 bg-gray-50' : '' }}">
                     Bénéficiaires
+                </a>
+                <a href="{{ route('beneficiaire.calendar') }}" class="block px-4 py-2 text-base font-medium text-gray-700 hover:text-red-500 hover:bg-gray-50 {{ request()->routeIs('beneficiaire.calendar') ? 'text-red-500 bg-gray-50' : '' }}">
+                    Calendrier
                 </a>
                 <!-- Candidatures Menu for Mobile -->
                 <div x-data="{ candidatureOpen: false }" class="relative">

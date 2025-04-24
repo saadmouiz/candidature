@@ -30,6 +30,8 @@ class Beneficiaire extends Model
         'appointment_sent_at',
         'attendance_confirmed',
         'attendance_confirmed_at',
+        'did_not_attend',
+        'absence_recorded_at',
     ];
 
     public function candidature()

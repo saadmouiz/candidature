@@ -270,6 +270,14 @@
         background-color: #059669;
     }
 
+    .action-btn.danger {
+        background-color: #ef4444;
+    }
+
+    .action-btn.danger:hover {
+        background-color: #dc2626;
+    }
+
     .appointment-info {
         background-color: var(--primary-light);
         border-left: 4px solid var(--primary);
@@ -313,6 +321,15 @@
 
     .attendance-confirmed .appointment-label {
         color: #10b981;
+    }
+
+    .attendance-missed {
+        background-color: #fef2f2;
+        border-left: 4px solid #ef4444;
+    }
+
+    .attendance-missed .appointment-label {
+        color: #ef4444;
     }
 
     @media (max-width: 768px) {
@@ -445,6 +462,33 @@
                         </div>
                     </div>
                 </div>
+            @elseif ($beneficiaire->has_appointment && $beneficiaire->did_not_attend)
+                <div class="appointment-info attendance-missed">
+                    <div class="appointment-label">Rendez-vous manqué</div>
+                    <div class="appointment-details">
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Date du rendez-vous</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->appointment_date)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Date d'envoi</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->appointment_sent_at)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Absence enregistrée le</div>
+                            <div class="appointment-item-value">{{ \Carbon\Carbon::parse($beneficiaire->absence_recorded_at)->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-item-label">Status</div>
+                            <div class="appointment-item-value text-red-500">Bénéficiaire absent</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="{{ route('beneficiaire.appointment.create', $beneficiaire) }}" class="action-btn">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Reprogrammer un rendez-vous</span>
+                </a>
             @elseif ($beneficiaire->has_appointment)
                 <div class="appointment-info">
                     <div class="appointment-label">Rendez-vous programmé</div>
@@ -464,13 +508,23 @@
                     </div>
                 </div>
                 
-                <form action="{{ route('beneficiaire.attendance.confirm', $beneficiaire) }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="action-btn success">
-                        <i class="fas fa-check"></i>
-                        <span>Confirmer la présence</span>
-                    </button>
-                </form>
+                <div class="flex mt-4 space-x-4">
+                    <form action="{{ route('beneficiaire.attendance.confirm', $beneficiaire) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="action-btn success">
+                            <i class="fas fa-check"></i>
+                            <span>Confirmer la présence</span>
+                        </button>
+                    </form>
+                    
+                    <form action="{{ route('beneficiaire.absence.record', $beneficiaire) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="action-btn danger bg-red-500 hover:bg-red-600">
+                            <i class="fas fa-times"></i>
+                            <span>Marquer comme absent</span>
+                        </button>
+                    </form>
+                </div>
             @else
                 <p>Aucun rendez-vous n'a encore été programmé pour ce bénéficiaire.</p>
                 
