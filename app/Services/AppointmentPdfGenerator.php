@@ -6,6 +6,7 @@ use App\Models\Beneficiaire;
 use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentPdfGenerator
 {
@@ -18,15 +19,37 @@ class AppointmentPdfGenerator
      */
     public function generate(Beneficiaire $beneficiaire, bool $includeImages = true)
     {
+        // Check if GD extension is loaded for image processing
+        $hasGdExtension = extension_loaded('gd');
+        $canRenderImages = $includeImages && $hasGdExtension;
+        
+        // Verify that the logo file exists
+        $logoExists = File::exists(public_path('assets/logo_ico.png'));
+        if (!$logoExists) {
+            Log::warning('Logo file not found at: ' . public_path('assets/logo_ico.png'));
+        }
+        
+        // Format appointment date using Carbon
+        $appointmentDate = \Carbon\Carbon::parse($beneficiaire->appointment_date);
+        
         $data = [
             'beneficiaire' => $beneficiaire,
-            'appointmentDate' => \Carbon\Carbon::parse($beneficiaire->appointment_date),
+            'appointmentDate' => $appointmentDate,
             'generatedAt' => now(),
-            'includeImages' => $includeImages && extension_loaded('gd'),
+            'includeImages' => $canRenderImages && $logoExists,
+            'hasLogo' => $logoExists,
         ];
 
+        // Configure PDF options
         $pdf = PDF::loadView('pdfs.appointment', $data);
         $pdf->setPaper('a4');
+        $pdf->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+            'isPhpEnabled' => true,
+            'isFontSubsettingEnabled' => true,
+            'dpi' => 150,
+        ]);
         
         return $pdf;
     }
@@ -35,10 +58,11 @@ class AppointmentPdfGenerator
      * Generate and save an appointment PDF to storage
      *
      * @param Beneficiaire $beneficiaire
-     * @return string The file path where the PDF was saved
+     * @return string|null The file path where the PDF was saved, or null if failed
      */
     public function generateAndSave(Beneficiaire $beneficiaire)
     {
+        try {
         // Check if GD extension is loaded
         $includeImages = extension_loaded('gd');
         
@@ -54,6 +78,16 @@ class AppointmentPdfGenerator
         
         $pdf->save(storage_path('app/public/' . $path));
         
+            // Verify the file was created
+            if (File::exists(storage_path('app/public/' . $path))) {
         return $path;
+            } else {
+                Log::error('Failed to create PDF file at: ' . storage_path('app/public/' . $path));
+                return null;
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception during PDF generation: ' . $e->getMessage());
+            return null;
+        }
     }
 } 

@@ -1,4 +1,3 @@
-<!-- resources/views/emails/acceptee.blade.php -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -102,8 +101,9 @@
             <div class="steps">
                 <p><strong>Prochaines étapes :</strong></p>
                 <ol>
-                    <li>Un membre de notre équipe vous contactera prochainement pour vous donner plus de détails sur la suite du processus.</li>
-                    <li>Une réunion d'information sera organisée dans les semaines à venir.</li>
+                    <li>Un membre de notre équipe va programmer un rendez-vous pour vous dans les prochains jours.</li>
+                    <li>Vous recevrez un email séparé avec les détails de ce rendez-vous (date, heure et modalités).</li>
+                    <li>Lors de ce rendez-vous, nous vous présenterons tous les détails du programme et répondrons à vos questions.</li>
                 </ol>
             </div>
             
@@ -113,7 +113,7 @@
                 <p>Si vous ne parvenez pas à ouvrir la pièce jointe, vous pouvez également <a href="{{ URL::signedRoute('contrats.telecharger', ['candidature' => $candidature->id]) }}" style="color: #ef4444; font-weight: 500;">télécharger le contrat ici</a>.</p>
             </div>
             
-            <p>Si vous avez des questions, n'hésitez pas à nous contacter par email ou par téléphone.</p>
+            <p>En attendant de recevoir l'email concernant votre rendez-vous, si vous avez des questions urgentes, n'hésitez pas à nous contacter par email ou par téléphone.</p>
             
             <p>Cordialement,<br>
             L'équipe du programme</p>

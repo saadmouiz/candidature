@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     // Gestion des bénéficiaires
     Route::get('/admin/beneficiaires', [BeneficiaireController::class, 'index'])->name('beneficiaire.index');
     Route::get('/admin/beneficiaires/{beneficiaire}', [BeneficiaireController::class, 'show'])->name('beneficiaire.show');
+    Route::get('/admin/beneficiaires/{beneficiaire}/export-pdf', [BeneficiaireController::class, 'exportPdf'])->name('beneficiaire.export-pdf');
     
     // Calendar view for appointments
     Route::get('/admin/calendar', [BeneficiaireController::class, 'calendar'])->name('beneficiaire.calendar');

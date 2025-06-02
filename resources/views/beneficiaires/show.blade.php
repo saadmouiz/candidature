@@ -32,6 +32,7 @@
     .page-header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         margin-bottom: 1.5rem;
     }
 
@@ -52,6 +53,29 @@
         background-color: #f3f4f6;
         color: var(--text-primary);
         text-decoration: none;
+    }
+
+    .export-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: var(--primary);
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .export-btn:hover {
+        background-color: var(--primary-hover);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 
     .main-card {
@@ -370,6 +394,10 @@
         <a href="{{ route('beneficiaire.index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i>
             <span>Retour à la liste</span>
+        </a>
+        <a href="{{ route('beneficiaire.export-pdf', $beneficiaire) }}" class="export-btn">
+            <i class="fas fa-file-pdf"></i>
+            <span>Exporter en PDF</span>
         </a>
     </div>
     

@@ -1,4 +1,3 @@
-<!-- resources/views/emails/appointment.blade.php -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,6 +81,20 @@
             border-radius: 4px;
             margin-top: 20px;
         }
+        .documents {
+            background-color: #e0f2fe;
+            border-left: 4px solid #0ea5e9;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .documents ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .documents li {
+            margin-bottom: 8px;
+        }
         .warning {
             background-color: #fef3c7;
             border-left: 4px solid #f59e0b;
@@ -107,31 +120,41 @@
             <div class="appointment-details">
                 <p><span class="label">Date :</span> {{ \Carbon\Carbon::parse($beneficiaire->appointment_date)->format('d/m/Y') }}</p>
                 <p><span class="label">Heure :</span> {{ \Carbon\Carbon::parse($beneficiaire->appointment_date)->format('H:i') }}</p>
-                <p><span class="label">Lieu :</span> Centre de Formation, 123 Boulevard Principal, Casablanca</p>
-                <p><span class="label">Contact :</span> Service des bénéficiaires (+212 522 XX XX XX)</p>
+                <p><span class="label">Lieu :</span> 1er étage, 45 Boulevard Bir Anzarane, Casablanca 20370</p>
+                <p><span class="label">Contact :</span> Service des bénéficiaires (05266-22626)</p>
+                
+                <div style="margin-top: 20px;">
+                    <p><span class="label">Lieu sur la carte :</span></p>
+                  <p> https://maps.app.goo.gl/aA15fk8GffvgD2XT8</p> 
+                </div>
+            </div>
+            
+            <div class="documents">
+                <p><strong>Documents à apporter impérativement :</strong></p>
+                <ul>
+                    <li>2 copies du diplôme de baccalauréat</li>
+                    <li>2 copies des relevés de notes</li>
+                    <li>2 copies d'acte de naissance</li>
+                    <li>2 copies de la carte d'identité nationale (CIN)</li>
+                    <li>3 photos d'identité récentes</li>
+                    <li>Le contrat légalisé (reçu dans l'email précédent)</li>
+                </ul>
+                <p><strong>Attention :</strong> L'absence d'un de ces documents pourrait retarder le traitement de votre dossier.</p>
             </div>
             
             @if(isset($pdfGenerationFailed) && $pdfGenerationFailed)
                 <div class="warning">
                     <p><strong>Note :</strong> Nous n'avons pas pu générer le document PDF détaillé pour votre rendez-vous en raison d'un problème technique.</p>
-                    <p>Veuillez noter les informations ci-dessus et apporter les documents suivants lors de votre rendez-vous :</p>
-                    <ul>
-                        <li>Carte d'identité nationale (CIN)</li>
-                        <li>Copie du contrat signé</li>
-                        <li>Toutes attestations ou documents pouvant appuyer votre dossier</li>
-                    </ul>
+                    <p>Veuillez noter les informations ci-dessus et apporter tous les documents mentionnés lors de votre rendez-vous.</p>
                     <p>Pour toute question, n'hésitez pas à nous contacter.</p>
                 </div>
             @else
-                <p>Veuillez trouver ci-joint le document détaillant votre rendez-vous. Ce document contient toutes les informations importantes concernant votre rendez-vous, ainsi que les documents à apporter.</p>
+                <p>Veuillez trouver ci-joint le document détaillant votre rendez-vous. Ce document contient des informations supplémentaires concernant votre rendez-vous.</p>
                 
                 <p>Si vous ne parvenez pas à ouvrir la pièce jointe, vous pouvez également <a href="{{ URL::signedRoute('appointments.download', ['beneficiaire' => $beneficiaire->id]) }}" style="color: #ef4444; font-weight: 500;">télécharger le document ici</a>.</p>
             @endif
             
-            <div class="note">
-                <p><strong>Important :</strong> Veuillez confirmer votre présence en répondant à cet email ou en contactant le numéro indiqué dans le document joint.</p>
-                <p>En cas d'empêchement, merci de nous prévenir au moins 48 heures à l'avance.</p>
-            </div>
+            
             
             <p>Nous nous réjouissons de vous rencontrer bientôt.</p>
             
@@ -143,4 +166,4 @@
         </div>
     </div>
 </body>
-</html> 
+</html>

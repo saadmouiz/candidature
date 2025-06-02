@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Mail\AppointmentMail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BeneficiaireController extends Controller
 {
@@ -183,5 +184,39 @@ class BeneficiaireController extends Controller
         }
         
         return view('beneficiaires.calendar', compact('appointments'));
+    }
+
+    /**
+     * Export beneficiary information as PDF
+     */
+    public function exportPdf(Beneficiaire $beneficiaire)
+    {
+        $beneficiaire->load('admin');
+        
+        // Handle photo conversion to base64 for PDF
+        $photoBase64 = null;
+        if ($beneficiaire->photo_path) {
+            $photoPath = storage_path('app/public/' . $beneficiaire->photo_path);
+            if (file_exists($photoPath)) {
+                $photoData = file_get_contents($photoPath);
+                $photoMimeType = mime_content_type($photoPath);
+                $photoBase64 = 'data:' . $photoMimeType . ';base64,' . base64_encode($photoData);
+            }
+        }
+        
+        // Generate PDF
+        $pdf = Pdf::loadView('beneficiaires.pdf', compact('beneficiaire', 'photoBase64'))
+                  ->setPaper('a4', 'portrait')
+                  ->setOptions([
+                      'isHtml5ParserEnabled' => true,
+                      'isPhpEnabled' => true,
+                      'defaultFont' => 'DejaVu Sans',
+                      'enable_css_float' => true,
+                      'enable_html5_parser' => true
+                  ]);
+        
+        $filename = 'beneficiaire_' . $beneficiaire->prenom . '_' . $beneficiaire->nom . '_' . $beneficiaire->id . '.pdf';
+        
+        return $pdf->download($filename);
     }
 }
