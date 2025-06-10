@@ -554,12 +554,14 @@
                     </form>
                 </div>
             @else
-                <p>Aucun rendez-vous n'a encore été programmé pour ce bénéficiaire.</p>
-                
-                <a href="{{ route('beneficiaire.appointment.create', $beneficiaire) }}" class="action-btn">
-                    <i class="fas fa-calendar-plus"></i>
-                    <span>Programmer un rendez-vous</span>
-                </a>
+                <div class="appointment-info space-y-4">
+                    <p>Aucun rendez-vous n'a encore été programmé pour ce bénéficiaire.</p>
+                    
+                    <a href="{{ route('beneficiaire.appointment.create', $beneficiaire) }}" class="action-btn">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>Programmer un rendez-vous</span>
+                    </a>
+                </div>
             @endif
         </div>
     </div>
