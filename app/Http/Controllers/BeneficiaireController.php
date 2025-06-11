@@ -12,6 +12,7 @@ use App\Mail\AppointmentMail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Response;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 class BeneficiaireController extends Controller
 {
@@ -55,6 +56,11 @@ class BeneficiaireController extends Controller
         if ($beneficiaire->has_appointment) {
             return redirect()->route('beneficiaire.show', $beneficiaire)
                 ->with('error', 'Ce bénéficiaire a déjà un rendez-vous programmé.');
+        }
+        
+        // Generate QR code token for attendance tracking if not exists
+        if (!$beneficiaire->qr_code_token) {
+            $beneficiaire->qr_code_token = Str::random(32);
         }
         
         // Update beneficiary with appointment details
@@ -218,5 +224,118 @@ class BeneficiaireController extends Controller
         $filename = 'beneficiaire_' . $beneficiaire->prenom . '_' . $beneficiaire->nom . '_' . $beneficiaire->id . '.pdf';
         
         return $pdf->download($filename);
+    }
+
+    /**
+     * Display QR code scanner page for admins
+     */
+    public function qrScanner()
+    {
+        return view('beneficiaires.qr-scanner');
+    }
+
+    /**
+     * Confirm attendance via QR code token
+     */
+    public function confirmAttendanceByQr($token)
+    {
+        try {
+            \Log::info('QR attendance confirmation attempt', ['token' => $token, 'method' => request()->method()]);
+            
+            $beneficiaire = Beneficiaire::where('qr_code_token', $token)->first();
+            
+            if (!$beneficiaire) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'QR code invalide ou expiré.'
+                ], 404);
+            }
+            
+            return view('beneficiaires.qr-result', [
+                'success' => false,
+                'message' => 'QR code invalide ou expiré.',
+                'beneficiaire' => null
+            ]);
+        }
+        
+        // Check if beneficiary has an appointment
+        if (!$beneficiaire->has_appointment) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ce bénéficiaire n\'a pas de rendez-vous programmé.'
+                ], 400);
+            }
+            
+            return view('beneficiaires.qr-result', [
+                'success' => false,
+                'message' => 'Ce bénéficiaire n\'a pas de rendez-vous programmé.',
+                'beneficiaire' => $beneficiaire
+            ]);
+        }
+        
+        // Check if already confirmed
+        if ($beneficiaire->attendance_confirmed) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Présence déjà confirmée précédemment.',
+                    'beneficiaire' => [
+                        'id' => $beneficiaire->id,
+                        'nom' => $beneficiaire->nom,
+                        'prenom' => $beneficiaire->prenom,
+                        'confirmed_at' => $beneficiaire->attendance_confirmed_at
+                    ]
+                ]);
+            }
+            
+            return view('beneficiaires.qr-result', [
+                'success' => true,
+                'message' => 'Présence déjà confirmée précédemment le ' . $beneficiaire->attendance_confirmed_at->format('d/m/Y à H:i'),
+                'beneficiaire' => $beneficiaire
+            ]);
+        }
+        
+        // Confirm attendance
+        $beneficiaire->attendance_confirmed = true;
+        $beneficiaire->attendance_confirmed_at = now();
+        $beneficiaire->save();
+        
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Présence confirmée avec succès!',
+                'beneficiaire' => [
+                    'id' => $beneficiaire->id,
+                    'nom' => $beneficiaire->nom,
+                    'prenom' => $beneficiaire->prenom,
+                    'confirmed_at' => $beneficiaire->attendance_confirmed_at
+                ]
+            ]);
+        }
+        
+        return view('beneficiaires.qr-result', [
+            'success' => true,
+            'message' => 'Présence confirmée avec succès!',
+            'beneficiaire' => $beneficiaire
+        ]);
+        
+        } catch (\Exception $e) {
+            \Log::error('Error in QR attendance confirmation', ['error' => $e->getMessage(), 'token' => $token]);
+            
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur serveur lors de la confirmation'
+                ], 500);
+            }
+            
+            return view('beneficiaires.qr-result', [
+                'success' => false,
+                'message' => 'Erreur serveur lors de la confirmation',
+                'beneficiaire' => null
+            ]);
+        }
     }
 }

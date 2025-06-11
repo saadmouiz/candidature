@@ -59,11 +59,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/beneficiaires/{beneficiaire}/presence', [BeneficiaireController::class, 'confirmAttendance'])->name('beneficiaire.attendance.confirm');
     Route::post('/admin/beneficiaires/{beneficiaire}/absence', [BeneficiaireController::class, 'recordAbsence'])->name('beneficiaire.absence.record');
     
+    // Routes pour le scanner QR
+    Route::get('/admin/qr-scanner', [BeneficiaireController::class, 'qrScanner'])->name('qr.scanner');
+    Route::post('/admin/qr-attendance/{token}', [BeneficiaireController::class, 'confirmAttendanceByQr'])->name('admin.qr.attendance');
+    
     // Route pour télécharger le document de rendez-vous
     Route::get('/rendez-vous/{beneficiaire}', [BeneficiaireController::class, 'downloadAppointment'])
         ->name('appointments.download')
         ->middleware('signed');
 });
+
+// Route publique pour confirmation de présence via QR code
+Route::match(['GET', 'POST'], '/qr-attendance/{token}', [BeneficiaireController::class, 'confirmAttendanceByQr'])
+    ->name('qr.attendance');
 
 // Routes d'authentification générées par Laravel UI
 Auth::routes();

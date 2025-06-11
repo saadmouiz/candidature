@@ -29,6 +29,10 @@
                         Calendrier
                     </a>
                     
+                    <a href="{{ route('qr.scanner') }}" class="text-gray-700 hover:text-red-500 px-3 py-2 text-sm font-medium transition duration-150 {{ request()->routeIs('qr.scanner') ? 'text-red-500 font-semibold' : '' }}">
+                        Scanner QR
+                    </a>
+                    
                     <!-- Candidatures Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center text-gray-700 hover:text-red-500 px-3 py-2 text-sm font-medium transition duration-150 {{ request()->routeIs('candidature.*') ? 'text-red-500 font-semibold' : '' }}">
@@ -121,6 +125,9 @@
                 </a>
                 <a href="{{ route('beneficiaire.calendar') }}" class="block px-4 py-2 text-base font-medium text-gray-700 hover:text-red-500 hover:bg-gray-50 {{ request()->routeIs('beneficiaire.calendar') ? 'text-red-500 bg-gray-50' : '' }}">
                     Calendrier
+                </a>
+                <a href="{{ route('qr.scanner') }}" class="block px-4 py-2 text-base font-medium text-gray-700 hover:text-red-500 hover:bg-gray-50 {{ request()->routeIs('qr.scanner') ? 'text-red-500 bg-gray-50' : '' }}">
+                    Scanner QR
                 </a>
                 <!-- Candidatures Menu for Mobile -->
                 <div x-data="{ candidatureOpen: false }" class="relative">

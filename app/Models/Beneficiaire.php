@@ -32,6 +32,7 @@ class Beneficiaire extends Model
         'attendance_confirmed_at',
         'did_not_attend',
         'absence_recorded_at',
+        'qr_code_token',
     ];
 
     public function candidature()

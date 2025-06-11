@@ -129,6 +129,24 @@
             flex: 1;
             min-width: 250px;
         }
+        .qr-section {
+            text-align: center;
+            background-color: #f0f9ff;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .qr-code {
+            margin: 10px auto;
+            display: block;
+        }
+        .qr-instructions {
+            font-size: 14px;
+            color: #374151;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -203,6 +221,55 @@
                 <li>Cette convocation imprimée</li>
             </ul>
         </div>
+        
+        @if(isset($qrCodeBase64) && $qrCodeBase64)
+        <div class="section">
+            <div class="section-title">CODE QR POUR PRÉSENCE</div>
+            <div class="qr-section">
+                <img src="{{ $qrCodeBase64 }}" alt="QR Code de présence" class="qr-code" style="width: 300px; height: 300px; display: block; margin: 0 auto;">
+                <div class="qr-instructions">
+                    <strong>Présentez ce code QR à l'accueil</strong><br>
+                    Ce code permettra de confirmer automatiquement votre présence au rendez-vous.<br>
+                    <em>Code unique: {{ substr($beneficiaire->qr_code_token, 0, 8) }}...</em>
+                </div>
+            </div>
+        </div>
+        @elseif(isset($beneficiaire->qr_code_token) && $beneficiaire->qr_code_token)
+        <div class="section">
+            <div class="section-title">CODE QR POUR PRÉSENCE</div>
+            <div class="qr-section">
+                <div style="text-align: center; padding: 20px; border: 2px dashed #ef4444; background-color: #fff5f5;">
+                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #ef4444;">
+                        <i style="font-size: 24px;">⚠</i> Code QR non disponible
+                    </div>
+                    <p style="margin: 10px 0;"><strong>Code de référence:</strong></p>
+                    <p style="font-family: monospace; font-size: 16px; font-weight: bold; background: #f3f4f6; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                        {{ $beneficiaire->qr_code_token }}
+                    </p>
+                    <p style="font-size: 14px; color: #666; margin: 10px 0;">
+                        Présentez ce code de référence à l'accueil pour confirmer votre présence
+                    </p>
+                    <p style="font-size: 12px; color: #999; margin-top: 15px;">
+                        <em>URL de vérification: {{ route('qr.attendance', ['token' => $beneficiaire->qr_code_token]) }}</em>
+                    </p>
+                </div>
+            </div>
+        </div>
+        @else
+        <div class="section">
+            <div class="section-title">CONFIRMATION DE PRÉSENCE</div>
+            <div class="qr-section">
+                <div style="text-align: center; padding: 20px; border: 2px solid #6b7280; background-color: #f9fafb;">
+                    <p style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">
+                        Confirmation manuelle requise
+                    </p>
+                    <p style="font-size: 14px; color: #666;">
+                        Veuillez vous présenter à l'accueil avec cette convocation pour confirmer votre présence
+                    </p>
+                </div>
+            </div>
+        </div>
+        @endif
         
         <div class="note">
             <strong>Important :</strong> En cas d'empêchement, veuillez nous contacter au moins 48 heures à l'avance pour reporter votre rendez-vous. Tout rendez-vous manqué sans notification préalable pourra entraîner la révision de votre statut de bénéficiaire.

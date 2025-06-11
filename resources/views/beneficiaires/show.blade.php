@@ -536,22 +536,11 @@
                     </div>
                 </div>
                 
-                <div class="flex mt-4 space-x-4">
-                    <form action="{{ route('beneficiaire.attendance.confirm', $beneficiaire) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="action-btn success">
-                            <i class="fas fa-check"></i>
-                            <span>Confirmer la présence</span>
-                        </button>
-                    </form>
-                    
-                    <form action="{{ route('beneficiaire.absence.record', $beneficiaire) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="action-btn danger bg-red-500 hover:bg-red-600">
-                            <i class="fas fa-times"></i>
-                            <span>Marquer comme absent</span>
-                        </button>
-                    </form>
+                <div class="flex mt-4 justify-center">
+                    <a href="{{ route('qr.scanner') }}" class="action-btn">
+                        <i class="fas fa-qrcode"></i>
+                        <span>Scanner QR Code pour confirmer présence</span>
+                    </a>
                 </div>
             @else
                 <div class="appointment-info space-y-4">

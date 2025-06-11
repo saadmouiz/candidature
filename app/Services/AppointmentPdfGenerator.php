@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
 
 class AppointmentPdfGenerator
 {
@@ -29,6 +31,41 @@ class AppointmentPdfGenerator
             Log::warning('Logo file not found at: ' . public_path('assets/logo_ico.png'));
         }
         
+        // Ensure QR code token exists
+        if (!$beneficiaire->qr_code_token) {
+            $beneficiaire->qr_code_token = Str::random(32);
+            $beneficiaire->save();
+        }
+        
+        // Generate QR code for PDF embedding using SVG format
+        $qrCodeBase64 = null;
+        $qrCodeSvg = null;
+        try {
+            $qrCodeData = route('qr.attendance', ['token' => $beneficiaire->qr_code_token]);
+            Log::info('Generating QR code for URL: ' . $qrCodeData);
+            
+            // Use bacon/bacon-qr-code directly with SVG backend (no imagick required)
+            $backend = new \BaconQrCode\Renderer\Image\SvgImageBackEnd();
+            $rendererStyle = new \BaconQrCode\Renderer\RendererStyle\RendererStyle(300);
+            $renderer = new \BaconQrCode\Renderer\ImageRenderer($rendererStyle, $backend);
+            $writer = new \BaconQrCode\Writer($renderer);
+            
+            $qrCodeSvg = $writer->writeString($qrCodeData);
+            
+            if ($qrCodeSvg && strlen($qrCodeSvg) > 0) {
+                // Convert SVG to base64 data URI for PDF embedding
+                $qrCodeBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrCodeSvg);
+                Log::info('QR code generated successfully as SVG for beneficiary: ' . $beneficiaire->id . ' (size: ' . strlen($qrCodeSvg) . ' bytes)');
+            } else {
+                throw new \Exception('QR code generation returned empty result');
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to generate QR code: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            $qrCodeBase64 = null;
+            $qrCodeSvg = null;
+        }
+        
         // Format appointment date using Carbon
         $appointmentDate = \Carbon\Carbon::parse($beneficiaire->appointment_date);
         
@@ -38,6 +75,8 @@ class AppointmentPdfGenerator
             'generatedAt' => now(),
             'includeImages' => $canRenderImages && $logoExists,
             'hasLogo' => $logoExists,
+            'qrCodeBase64' => $qrCodeBase64,
+            'qrCodeSvg' => $qrCodeSvg,
         ];
 
         // Configure PDF options
